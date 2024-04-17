@@ -30,13 +30,16 @@ namespace LoggingKata
             // Use the Select LINQ method to parse every line in lines collection
             var locations = lines.Select(parser.Parse).ToArray();
 
-  
+
             // Complete the Parse method in TacoParser class first and then START BELOW ----------
 
             // TODO: Create two `ITrackable` variables with initial values of `null`. 
             // These will be used to store your two Taco Bells that are the farthest from each other.
-            
+            ITrackable farTcb1 = null;
+            ITrackable farTcb2 = null;
+
             // TODO: Create a `double` variable to store the distance
+            double distance = 0;
 
             // TODO: Add the Geolocation library to enable location comparisons: using GeoCoordinatePortable;
             // Look up what methods you have access to within this library.
@@ -47,6 +50,37 @@ namespace LoggingKata
             // TODO: Create a loop to go through each item in your collection of locations.
             // This loop will let you select one location at a time to act as the "starting point" or "origin" location.
             // Naming suggestion for variable: `locA`
+
+            for (int i = 0; i < locations.Length; i++)
+            {
+                var locA = locations[i];
+                var corA = new GeoCoordinate();
+
+                corA.Latitude = locA.Location.Latitude;
+                corA.Longitude = locA.Location.Longitude;
+
+                for (int f = 0; f < locations.Length; f++)
+                {
+                    var locB = locations[f];
+                    var corB = new GeoCoordinate();
+
+                    corB.Latitude = locB.Location.Latitude;
+                    corB.Longitude = locB.Location.Longitude;
+
+                    double distanceChecker = corA.GetDistanceTo(corB);
+
+                    if (distanceChecker > distance)
+                    {
+                        distance = distanceChecker;
+
+                        farTcb1 = locA;
+                        farTcb2 = locB;
+                    }
+                }
+
+            }
+
+            Console.WriteLine($"The two Toco Bells fathest from each other are {farTcb1.Name} at coordinates {farTcb1.Location.Latitude}, {farTcb1.Location.Longitude} and {farTcb2.Name} at coordinates {farTcb2.Location.Latitude}, {farTcb2.Location.Longitude}.");
 
             // TODO: Once you have locA, create a new Coordinate object called `corA` with your locA's latitude and longitude.
 
@@ -66,7 +100,7 @@ namespace LoggingKata
             // Display these two Taco Bell locations to the console.
 
 
-            
+
         }
     }
 }
